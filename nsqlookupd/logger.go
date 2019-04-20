@@ -14,6 +14,6 @@ const (
 	LOG_FATAL = lg.FATAL
 )
 
-func (n *NSQLookupd) logf(level lg.LogLevel, f string, args ...interface{}) {
-	lg.Logf(n.opts.Logger, n.opts.LogLevel, level, f, args...)
+func (l *NSQLookupd) logf(level lg.LogLevel, f string, args ...interface{}) {
+	lg.Logf(l.opts.Logger, l.opts.LogLevel, level, f, args...)
 }
