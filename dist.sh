@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# 构建发布文件
 # 1. commit to bump the version and update the changelog/readme
 # 2. tag that commit
 # 3. use dist.sh to produce tar.gz for all platforms
@@ -19,7 +20,7 @@ rm -rf   $DIR/dist/docker
 mkdir -p $DIR/dist/docker
 
 GOFLAGS='-ldflags="-s -w"'
-arch=$(go env GOARCH)
+arch=$(go env GOARCH) # 程序构建环境的目标计算架构。
 version=$(awk '/const Binary/ {print $NF}' < $DIR/internal/version/binary.go | sed 's/"//g')
 goversion=$(go version | awk '{print $3}')
 

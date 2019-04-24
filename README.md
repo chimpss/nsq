@@ -1,13 +1,32 @@
-<p align="center">
-<img align="left" width="175" src="http://nsq.io/static/img/nsq_blue.png">
-<ul>
-<li><strong>Source</strong>: https://github.com/nsqio/nsq
-<li><strong>Issues</strong>: https://github.com/nsqio/nsq/issues
-<li><strong>Mailing List</strong>: <a href="https://groups.google.com/d/forum/nsq-users">nsq-users@googlegroups.com</a>
-<li><strong>IRC</strong>: #nsq on freenode
-<li><strong>Docs</strong>: http://nsq.io
-<li><strong>Twitter</strong>: <a href="https://twitter.com/nsqio">@nsqio</a>
-</ul>
-</p>
+### before learn
 
-[![Build Status](https://secure.travis-ci.org/nsqio/nsq.svg?branch=master)](http://travis-ci.org/nsqio/nsq) [![GitHub release](https://img.shields.io/github/release/nsqio/nsq.svg)](https://github.com/nsqio/nsq/releases/latest) [![Coverage Status](https://coveralls.io/repos/github/nsqio/nsq/badge.svg?branch=master)](https://coveralls.io/github/nsqio/nsq?branch=master)
+- nsq的项目使用go-mod搭建
+- 出了apps，其他的所有目录看成一个包
+- 所有的程序入口放到apps下
+- fmt.sh：goimports当前目录下所有文件
+- coverage.sh: 测试相关文件，测试覆盖率
+- dist.sh: 构建发布文件
+- 
+
+### apps
+
+- 所有的可执行程序的入口。
+
+### bench
+
+### contrib
+
+### internal
+
+### nsqadmin
+
+### nsqd
+
+### nsqlookupd
+
+
+
+
+
+
+
