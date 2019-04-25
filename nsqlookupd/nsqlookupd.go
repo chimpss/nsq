@@ -47,6 +47,7 @@ func New(opts *Options) (*NSQLookupd, error) {
 	return l, nil
 }
 
+// 入口函数
 // Main starts an instance of nsqlookupd and returns an
 // error if there was a problem starting up.
 func (l *NSQLookupd) Main() error {
@@ -64,14 +65,17 @@ func (l *NSQLookupd) Main() error {
 	}
 
 	tcpServer := &tcpServer{ctx: ctx}
+	// 异步执行，tcp监听
 	l.waitGroup.Wrap(func() {
 		exitFunc(protocol.TCPServer(l.tcpListener, tcpServer, l.logf))
 	})
 	httpServer := newHTTPServer(ctx)
+	// 异步执行，http监听
 	l.waitGroup.Wrap(func() {
 		exitFunc(http_api.Serve(l.httpListener, httpServer, "HTTP", l.logf))
 	})
 
+	// 等待两个异步结果
 	err := <-exitCh
 	return err
 }
@@ -84,6 +88,7 @@ func (l *NSQLookupd) RealHTTPAddr() *net.TCPAddr {
 	return l.httpListener.Addr().(*net.TCPAddr)
 }
 
+// 关闭监听，？为什么要关闭监听
 func (l *NSQLookupd) Exit() {
 	if l.tcpListener != nil {
 		l.tcpListener.Close()

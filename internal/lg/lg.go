@@ -41,6 +41,7 @@ func (l *LogLevel) Set(s string) error {
 	return nil
 }
 
+// 返回level
 func (l *LogLevel) String() string {
 	switch *l {
 	case DEBUG:
@@ -73,6 +74,7 @@ func ParseLogLevel(levelstr string) (LogLevel, error) {
 	return 0, fmt.Errorf("invalid log level '%s' (debug, info, warn, error, fatal)", levelstr)
 }
 
+// 打印不同级别log，只在测试环境中打印（可以借鉴）
 func Logf(logger Logger, cfgLevel LogLevel, msgLevel LogLevel, f string, args ...interface{}) {
 	if cfgLevel > msgLevel {
 		return
@@ -80,6 +82,7 @@ func Logf(logger Logger, cfgLevel LogLevel, msgLevel LogLevel, f string, args ..
 	logger.Output(3, fmt.Sprintf(msgLevel.String()+": "+f, args...))
 }
 
+// 程序退出，并且打印错误日志
 func LogFatal(prefix string, f string, args ...interface{}) {
 	logger := log.New(os.Stderr, prefix, log.Ldate|log.Ltime|log.Lmicroseconds)
 	Logf(logger, FATAL, FATAL, f, args...)

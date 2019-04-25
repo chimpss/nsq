@@ -38,7 +38,6 @@ func nsqlookupdFlagSet(opts *nsqlookupd.Options) *flag.FlagSet {
 }
 
 type program struct {
-	once sync.Once // sync包的once对象：只执行一次动作的对象。
 	// example：
 	//var once sync.Once
 	//onceBody := func() {
@@ -54,6 +53,7 @@ type program struct {
 	//for i := 0; i < 10; i++ {
 	//   <-done
 	//}
+	once       sync.Once // sync包的once对象：只执行一次动作的对象。
 	nsqlookupd *nsqlookupd.NSQLookupd
 }
 
@@ -101,6 +101,7 @@ func (p *program) Start() error {
 	options.Resolve(opts, flagSet, cfg)
 	nsqlookupd, err := nsqlookupd.New(opts)
 	if err != nil {
+		// 打印错误并退出程序
 		logFatal("failed to instantiate nsqlookupd", err)
 	}
 	p.nsqlookupd = nsqlookupd
