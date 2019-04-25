@@ -38,7 +38,22 @@ func nsqlookupdFlagSet(opts *nsqlookupd.Options) *flag.FlagSet {
 }
 
 type program struct {
-	once       sync.Once
+	once sync.Once // sync包的once对象：只执行一次动作的对象。
+	// example：
+	//var once sync.Once
+	//onceBody := func() {
+	//   fmt.Println("Only once")
+	//}
+	//done := make(chan bool)
+	//for i := 0; i < 10; i++ {
+	//   go func() {
+	//       once.Do(onceBody)
+	//       done <- true
+	//   }()
+	//}
+	//for i := 0; i < 10; i++ {
+	//   <-done
+	//}
 	nsqlookupd *nsqlookupd.NSQLookupd
 }
 
@@ -101,6 +116,7 @@ func (p *program) Start() error {
 	return nil
 }
 
+// 退出守护进程，不过这个error返回写的有点疑问
 func (p *program) Stop() error {
 	p.once.Do(func() {
 		p.nsqlookupd.Exit()
