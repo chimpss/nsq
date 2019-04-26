@@ -21,6 +21,7 @@ type Options struct {
 	TombstoneLifetime       time.Duration `flag:"tombstone-lifetime"`
 }
 
+// 初始化配置
 func NewOptions() *Options {
 	hostname, err := os.Hostname()
 	if err != nil {

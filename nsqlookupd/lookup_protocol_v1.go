@@ -21,6 +21,7 @@ type LookupProtocolV1 struct {
 	ctx *Context
 }
 
+// 一直
 func (p *LookupProtocolV1) IOLoop(conn net.Conn) error {
 	var err error
 	var line string
@@ -37,12 +38,15 @@ func (p *LookupProtocolV1) IOLoop(conn net.Conn) error {
 		params := strings.Split(line, " ")
 
 		var response []byte
+		// 关键执行代码
 		response, err = p.Exec(client, reader, params)
+		// 如果发生错误，在外面处理
 		if err != nil {
 			ctx := ""
 			if parentErr := err.(protocol.ChildErr).Parent(); parentErr != nil {
 				ctx = " - " + parentErr.Error()
 			}
+			// 面向对象的方式处理
 			p.ctx.nsqlookupd.logf(LOG_ERROR, "[%s] - %s%s", client, err, ctx)
 
 			_, sendErr := protocol.SendResponse(client, []byte(err.Error()))
@@ -80,6 +84,7 @@ func (p *LookupProtocolV1) IOLoop(conn net.Conn) error {
 	return err
 }
 
+// 真正的命令执行函数
 func (p *LookupProtocolV1) Exec(client *ClientV1, reader *bufio.Reader, params []string) ([]byte, error) {
 	switch params[0] {
 	case "PING":
@@ -94,6 +99,7 @@ func (p *LookupProtocolV1) Exec(client *ClientV1, reader *bufio.Reader, params [
 	return nil, protocol.NewFatalClientErr(nil, "E_INVALID", fmt.Sprintf("invalid command %s", params[0]))
 }
 
+// 解析并判断params是否正确，topicName := params[0]，channelName = params[1]
 func getTopicChan(command string, params []string) (string, string, error) {
 	if len(params) == 0 {
 		return "", "", protocol.NewFatalClientErr(nil, "E_INVALID", fmt.Sprintf("%s insufficient number of params", command))
@@ -116,11 +122,13 @@ func getTopicChan(command string, params []string) (string, string, error) {
 	return topicName, channelName, nil
 }
 
+// 注册
 func (p *LookupProtocolV1) REGISTER(client *ClientV1, reader *bufio.Reader, params []string) ([]byte, error) {
 	if client.peerInfo == nil {
 		return nil, protocol.NewFatalClientErr(nil, "E_INVALID", "client must IDENTIFY")
 	}
 
+	// 解析参数
 	topic, channel, err := getTopicChan("REGISTER", params)
 	if err != nil {
 		return nil, err

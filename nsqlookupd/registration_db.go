@@ -7,33 +7,37 @@ import (
 	"time"
 )
 
+//
 type RegistrationDB struct {
-	sync.RWMutex
-	registrationMap map[Registration]ProducerMap
+	sync.RWMutex                                 // 无论读写操作，都上锁
+	registrationMap map[Registration]ProducerMap // 以 Registration 为 key 储存 Producers, 即生产者
 }
 
+// 注册的key
 type Registration struct {
-	Category string
-	Key      string
-	SubKey   string
+	Category string // 类型 		例如：channel
+	Key      string // 关键字1	例如：topic name
+	SubKey   string // 关键字2	例如：channel name
 }
 type Registrations []Registration
 
+// 节点信息
 type PeerInfo struct {
-	lastUpdate       int64
-	id               string
-	RemoteAddress    string `json:"remote_address"`
-	Hostname         string `json:"hostname"`
-	BroadcastAddress string `json:"broadcast_address"`
-	TCPPort          int    `json:"tcp_port"`
-	HTTPPort         int    `json:"http_port"`
-	Version          string `json:"version"`
+	lastUpdate       int64  // 上次更新时间
+	id               string // 标识符
+	RemoteAddress    string `json:"remote_address"`    // 地址
+	Hostname         string `json:"hostname"`          // 主机名
+	BroadcastAddress string `json:"broadcast_address"` // 广播地址
+	TCPPort          int    `json:"tcp_port"`          // tcp 地址
+	HTTPPort         int    `json:"http_port"`         // http 地址
+	Version          string `json:"version"`           // 版本号
 }
 
+// *生产者*
 type Producer struct {
-	peerInfo     *PeerInfo
-	tombstoned   bool
-	tombstonedAt time.Time
+	peerInfo     *PeerInfo // 节点信息
+	tombstoned   bool      // 是否删除
+	tombstonedAt time.Time // 删除时间
 }
 
 type Producers []*Producer

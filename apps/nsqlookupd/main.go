@@ -99,6 +99,7 @@ func (p *program) Start() error {
 
 	// 使用了options包，这个包的作用：通过命令行标志，配置文件和默认结构值来解析配置值
 	options.Resolve(opts, flagSet, cfg)
+
 	nsqlookupd, err := nsqlookupd.New(opts)
 	if err != nil {
 		// 打印错误并退出程序

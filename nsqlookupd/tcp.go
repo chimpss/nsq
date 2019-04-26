@@ -12,6 +12,9 @@ type tcpServer struct {
 }
 
 // tcp 控制器
+// 为什么在IOLoop外面包了一成handler，
+// 		是因为，需要解析version，从而根据不同的version，来判断该用哪一个Protocol
+//		方便后期升级，更新
 func (p *tcpServer) Handle(clientConn net.Conn) {
 	p.ctx.nsqlookupd.logf(LOG_INFO, "TCP: new client(%s)", clientConn.RemoteAddr())
 
@@ -46,6 +49,8 @@ func (p *tcpServer) Handle(clientConn net.Conn) {
 		return
 	}
 
+	// 轮询clientConn， LookupProtocolV1的IOLoop方法
+	// 关键loop方法
 	err = prot.IOLoop(clientConn)
 	if err != nil {
 		p.ctx.nsqlookupd.logf(LOG_ERROR, "client(%s) - %s", clientConn.RemoteAddr(), err)
